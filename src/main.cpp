@@ -4,6 +4,7 @@
 #include "Tile.h"
 #include "Camera.h"
 #include "FpsManager.h"
+#include "Player.h"
 
 void cameraControl(sf::RenderWindow* window, Camera* cam) {
     sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
@@ -39,6 +40,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(512, 512), "Title");
     Camera cam(&window);
 
+    Player p{};
+
     Tile* tiles[100] = {};
     for (int x = 3; x < 13; x++) {
         for (int y = 3; y < 13; y++) {
@@ -65,6 +68,10 @@ int main() {
                         window.close();
                     }
                     break;
+                case sf::Event::MouseButtonPressed:
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        p.setPosition(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+                    }
                 default:
                     break;
             }
@@ -73,6 +80,7 @@ int main() {
         for (Tile* tile: tiles) {
             window.draw(*tile);
         }
+        window.draw(p);
         window.display();
     }
     return 0;

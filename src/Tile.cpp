@@ -30,5 +30,5 @@ Tile::Tile(sf::Vector2i &indexes): Tile(indexes.x, indexes.y) {};
 
 void Tile::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= getTransform();
-    target.draw(m_vertices);
+    target.draw(m_vertices, states);
 };
