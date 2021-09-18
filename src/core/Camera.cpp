@@ -3,7 +3,7 @@
 //
 
 #include "Camera.h"
-#include "FpsManager.h"
+#include "../managers/FpsManager.h"
 
 Camera::Camera(sf::RenderWindow *window) {
     m_window = window;
