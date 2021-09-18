@@ -33,7 +33,9 @@ void cameraControl(sf::RenderWindow* window, Camera* cam) {
 }
 
 int main() {
-    setenv("DISPLAY", "127.0.0.1:0.0", true);
+    // For x11 gui forwarding
+    setenv("DISPLAY", "127.0.0.1:0.0", false);
+
     sf::RenderWindow window(sf::VideoMode(512, 512), "Title");
     Camera cam(&window);
 
