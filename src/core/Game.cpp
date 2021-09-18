@@ -2,14 +2,16 @@
 // Created by eitan on 18-Sep-21.
 //
 
+#include <iostream>
+#include <string>
 #include "Game.h"
 #include "../managers/FpsManager.h"
 
-void cameraControl(sf::RenderWindow* window, Camera* cam) {
+sf::Vector2f cameraControl(sf::RenderWindow* window) {
     sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
     sf::Vector2f windowSize = window->getView().getSize();
 
-    sf::Vector2i edgeMovement{};
+    sf::Vector2f edgeMovement{};
     float borderMargin = 30.f;
     if (mousePos.x < borderMargin && mousePos.x > 0) {
         // Left
@@ -29,12 +31,12 @@ void cameraControl(sf::RenderWindow* window, Camera* cam) {
         edgeMovement.y = 1;
     }
 
-    cam->move(edgeMovement);
+    return edgeMovement;
 }
 
 Game::Game(): m_window(sf::RenderWindow(sf::VideoMode(800, 600), "Title")),
-              m_mainCamera(&m_window){
-    m_window.setVerticalSyncEnabled(true);
+              m_mainCamera(&m_window) {
+//    m_window.setVerticalSyncEnabled(true);
 
     for (int x = 3; x < 13; x++) {
         for (int y = 3; y < 13; y++) {
@@ -44,9 +46,16 @@ Game::Game(): m_window(sf::RenderWindow(sf::VideoMode(800, 600), "Title")),
 };
 
 void Game::run() {
+    sf::Time timeSinceLastUpdate = sf::Time::Zero;
     while (m_window.isOpen()) {
-        processEvents();
-        update();
+        FPSManager::update();
+        timeSinceLastUpdate += FPSManager::getDeltaTime();
+
+        while (timeSinceLastUpdate > FPSManager::targetTimePerFrame) {
+            timeSinceLastUpdate -= FPSManager::targetTimePerFrame;
+            processEvents();
+            update(FPSManager::targetTimePerFrame);
+        }
         render();
     }
 }
@@ -70,13 +79,14 @@ void Game::processEvents() {
     }
 }
 
-void Game::update() {
-    FPSManager::Update();
-    float fps = FPSManager::getFps();
+void Game::update(sf::Time deltaTime) {
+    int fps = (int)FPSManager::getFps();
 
-    m_window.setTitle(std::to_string((int)fps));
+    m_window.setTitle(std::to_string(fps));
 
-    cameraControl(&m_window, &m_mainCamera);
+    sf::Vector2f cameraMovementDelta = cameraControl(&m_window);
+    cameraMovementDelta *= deltaTime.asSeconds();
+    m_mainCamera.move(cameraMovementDelta);
 }
 
 void Game::render() {

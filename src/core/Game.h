@@ -16,7 +16,7 @@ public:
     void run();
 private:
     void processEvents();
-    void update();
+    void update(sf::Time deltaTime);
     void render();
 
     sf::RenderWindow m_window;
