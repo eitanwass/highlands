@@ -3,7 +3,7 @@
 //
 
 #include "Camera.h"
-#include "FpsManager.h"
+#include "../managers/FpsManager.h"
 
 Camera::Camera(sf::RenderWindow *window) {
     m_window = window;
@@ -12,16 +12,14 @@ Camera::Camera(sf::RenderWindow *window) {
 };
 
 void Camera::move(float x, float y) {
-    float dtime = 1 / FPSManager::getFps();
-
     sf::Vector2f deltaVector(x, y);
-    deltaVector *= m_cameraSpeed * dtime;
+    deltaVector *= m_cameraSpeed;
 
     sf::View view = m_window->getView();
     view.move(deltaVector);
     m_window->setView(view);
 }
 
-void Camera::move(sf::Vector2i v) {
+void Camera::move(sf::Vector2f v) {
     return Camera::move(v.x, v.y);
 }

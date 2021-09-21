@@ -11,16 +11,19 @@ class FPSManager {
 public:
     static sf::Clock m_clock;
 
-    static sf::Time previousTime;
-    static sf::Time currentTime;
+    const static sf::Time targetTimePerFrame;
 
-    static float m_fps;
-
-    static void Update();
+    static void update();
 
     static float getFps();
+    static sf::Time getDeltaTime();
 private:
     FPSManager() = default;
+
+    static float m_fps;
+    constexpr const static float m_targetFps{60.f};
+
+    static sf::Time m_deltaTime;
 };
 
 #endif //GUI_TEST_FPSMANAGER_H

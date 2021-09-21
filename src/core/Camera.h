@@ -12,7 +12,7 @@ public:
     Camera(sf::RenderWindow* window);
 
     void move(float x, float y);
-    void move(sf::Vector2i);
+    void move(sf::Vector2f);
 private:
     sf::RenderWindow* m_window;
     float m_cameraSpeed = 100.f;
